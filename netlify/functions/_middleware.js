@@ -1,9 +1,8 @@
 const jwt = require('jsonwebtoken')
 
-function corsHeaders(origin) {
-  const allowed = ['https://seu-site.netlify.app', 'http://localhost:3000']
+function corsHeaders() {
   return {
-    'Access-Control-Allow-Origin': allowed.includes(origin) ? origin : allowed[0],
+    'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Headers': 'Content-Type, Authorization',
     'Access-Control-Allow-Methods': 'POST, OPTIONS',
     'Content-Type': 'application/json'
@@ -11,7 +10,7 @@ function corsHeaders(origin) {
 }
 
 function verifyToken(event) {
-  const auth = event.headers.authorization || ''
+  const auth = event.headers.authorization || event.headers.Authorization || ''
   if (!auth.startsWith('Bearer ')) return null
   try {
     return jwt.verify(auth.slice(7), process.env.JWT_SECRET)
